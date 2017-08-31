@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="jerry-mouse" default="build-all">
+
+    <property name="build.path" value="build"/>
+    <property name="build.classes" value="${build.path}/classes" />
+    <property name="build.bin" value="${build.path}/bin" />
+    <property name="build.lib" value="${build.bin}/lib" />
+    <property name="build.app" value="${build.bin}/apps"/>
+
+    <target name="clean">
+        <delete dir="${build.path}"></delete>
+        <mkdir dir="${build.path}"></mkdir>
+        <mkdir dir="${build.classes}"></mkdir>
+        <mkdir dir="${build.bin}"></mkdir>
+        <mkdir dir="${build.lib}"></mkdir>
+        <mkdir dir="${build.app}"></mkdir>
+    </target>
+
+
+
+    <target name="api">
+        <mkdir dir="${build.classes}/api"></mkdir>
+        <javac destdir="${build.classes}/api" srcdir="api/src"></javac>
+        <jar destfile="${build.lib}/api.jar" basedir="${build.classes}/api"></jar>
+    </target>
+
+    <path id="api-classpath">
+        <pathelement path="lib"></pathelement>
+        <pathelement location="${build.classes}/api"></pathelement>
+    </path>
+
+    <target name="ROOT">
+        <mkdir dir="${build.classes}/ROOT"></mkdir>
+        <!--<javac destdir="${build.classes}/ROOT" srcdir="ROOT/src"></javac>-->
+        <copy todir="${build.classes}/ROOT">
+            <fileset dir="ROOT/resources"></fileset>
+        </copy>
+        <jar destfile="${build.app}/ROOT.jar" basedir="${build.classes}/ROOT"></jar>
+    </target>
+
+    <target name="example">
+        <mkdir dir="${build.classes}/example"></mkdir>
+        <javac destdir="${build.classes}/example" srcdir="example/src">
+            <classpath refid="api-classpath"></classpath>
+        </javac>
+        <copy todir="${build.classes}/example">
+            <fileset dir="example/resources"></fileset>
+        </copy>
+        <jar destfile="${build.app}/example.jar" basedir="${build.classes}/example"></jar>
+    </target>
+
+
+    <target name="copy-lib">
+        <copy todir="${build.lib}">
+            <fileset dir="lib"></fileset>
+        </copy>
+    </target>
+
+
+    <target name="build-all" depends="clean,api,ROOT,example,copy-lib">
+        <echo message="Build success!"></echo>
+    </target>
+
+
+</project>
