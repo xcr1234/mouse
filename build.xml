@@ -49,15 +49,26 @@
         <jar destfile="${build.app}/example.jar" basedir="${build.classes}/example"></jar>
     </target>
 
+    <target name="server">
+        <mkdir dir="${build.classes}/server"></mkdir>
+        <javac destdir="${build.classes}/server" srcdir="server/src">
+            <classpath refid="api-classpath"></classpath>
+        </javac>
+        <jar destfile="${build.lib}/server.jar" basedir="${build.classes}/server"></jar>
+    </target>
+
 
     <target name="copy-lib">
         <copy todir="${build.lib}">
             <fileset dir="lib"></fileset>
         </copy>
+        <copy todir="${build.bin}">
+            <fileset dir="resources"></fileset>
+        </copy>
     </target>
 
 
-    <target name="build-all" depends="clean,api,ROOT,example,copy-lib">
+    <target name="build-all" depends="clean,api,ROOT,example,server,copy-lib">
         <echo message="Build success!"></echo>
     </target>
 
